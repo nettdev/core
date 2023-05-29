@@ -1,5 +1,7 @@
 namespace Nett.Core;
 
+[AttributeUsage(AttributeTargets.Class)]
+
 public class ResourceAttribute : Attribute
 {
     public string Name { get; }

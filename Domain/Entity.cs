@@ -5,7 +5,7 @@ namespace Nett.Core;
 [ExcludeFromCodeCoverage]
 public class Entity : IEquatable<Entity>, IAggregateRoot
 {
-    private List<INotification> _events;
+    private readonly List<INotification> _events;
 
     [JsonIgnore]
     public IReadOnlyCollection<INotification> Events => _events.AsReadOnly();

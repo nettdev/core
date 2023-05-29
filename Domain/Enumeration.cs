@@ -20,7 +20,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>> where 
         _enumerations.Values.SingleOrDefault(e => e?.Name == name);
 
     public bool Equals(Enumeration<TEnum>? other) =>
-        other is null ? false : GetType() == other.GetType() && Value == other.Value;
+        other is not null && GetType() == other.GetType() && Value == other.Value;
 
     public override bool Equals(object? obj) =>
         obj is Enumeration<TEnum> other && Equals(other);
