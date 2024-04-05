@@ -5,16 +5,15 @@ on:
     branches: [ main ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: setup
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
 
     - name: restore
       run: dotnet restore
@@ -27,17 +26,17 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: setup
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
       
     - name: test
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
     - name: coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
 
   publish:
     runs-on: ubuntu-latest
@@ -48,7 +47,7 @@ jobs:
     - name: setup
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
 
     - name: dotnet pack
       run: dotnet pack "Core.csproj" /p:PackageVersion=${{ github.ref_name }} -c Release -o ./dist
