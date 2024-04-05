@@ -9,6 +9,7 @@
     <RootNamespace>Nett.Core</RootNamespace>
     <AssemblyName>Nett.Core</AssemblyName>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
