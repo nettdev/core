@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Nett.Core.UnitTest;
 
+[ExcludeFromCodeCoverage]
 public class EnumerationTest
 {
     [Fact]
