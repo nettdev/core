@@ -1,7 +1,7 @@
 namespace Nett.Core;
 
 [ExcludeFromCodeCoverage]
-public record ErrorDetails(string Message, string? Code = null, string? Property = null, string? Severity = null);
+public record ErrorDetails(string Message, string? Property = null, string? Code = null, string? Severity = null);
 
 [ExcludeFromCodeCoverage]
 public record Error(IEnumerable<ErrorDetails> Errors, string Type = "", string Title = "", int StatusCode = 400, string TraceId = "")
