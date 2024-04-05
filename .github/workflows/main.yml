@@ -34,7 +34,7 @@ jobs:
         dotnet-version: '8.0.x'
       
     - name: test
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      run: dotnet test test/UnitTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
     - name: coverage
       uses: codecov/codecov-action@v4

@@ -1,7 +1,7 @@
 namespace Nett.Core;
 
+[ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Class)]
-
 public class ResourceAttribute : Attribute
 {
     public string Name { get; }
