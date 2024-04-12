@@ -4,10 +4,10 @@ namespace Nett.Core;
 public record ErrorDetails(string Message, string? Property = null, string? Code = null, string? Severity = null);
 
 [ExcludeFromCodeCoverage]
-public record Error(IEnumerable<ErrorDetails> Errors, string Type = "", string Title = "", int StatusCode = 400, string TraceId = "")
+public record Error(string Type = "", string Title = "", int StatusCode = 400, string TraceId = "", IEnumerable<ErrorDetails> Errors = null!)
 {
     private const string BadRequesRFC = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
 
     public static Error DefaultDatabaseError =>
-        new([new("An error occurred while saving")], BadRequesRFC, "BadRequest", 400);
+        new(BadRequesRFC, "BadRequest", 400, "", [new("An error occurred while saving")]);
 }

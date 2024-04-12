@@ -21,6 +21,4 @@ public class Result<TData, TError>
 
     public TResult Match<TResult>(Func<TData, TResult> success, Func<TError, TResult> error) =>
         IsSuccess ? success(Data!) : error(Error!);
-
-    private Result() {}
 }

@@ -15,7 +15,7 @@ public class Entity : IEquatable<Entity>, IAggregateRoot
     protected Entity() 
     {
         Id = Guid.NewGuid();
-        _events = new List<INotification>();
+        _events = [];
     }
 
     public void AddEvent(INotification @event) =>
