@@ -35,11 +35,41 @@ public class DomainException : Exception
     public static void ThrowIfEmpty<T>(IEnumerable<T> values, string message, string? property, string? code) =>
         ThrowIf(!values.Any(), message, property, code);
 
+    public static void ThrowIfNegative(int value, string message, string? property, string? code) =>
+        ThrowIf(value < 0, message, property, code);
+
     public static void ThrowIfNegative(double value, string message, string? property, string? code) =>
         ThrowIf(value < 0, message, property, code);
 
     public static void ThrowIfNegative(decimal value, string message, string? property, string? code) =>
         ThrowIf(value < 0, message, property, code);
+
+    public static void ThrowIfZero(int value, string message, string? property, string? code) =>
+        ThrowIf(value == 0, message, property, code);
+
+    public static void ThrowIfZero(double value, string message, string? property, string? code) =>
+        ThrowIf(value == 0, message, property, code);
+
+    public static void ThrowIfZero(decimal value, string message, string? property, string? code) =>
+        ThrowIf(value == 0, message, property, code);
+
+    public static void ThrowIfLessThan(int value, double parameter, string message, string? property, string? code) =>
+        ThrowIf(value < parameter, message, property, code);
+
+    public static void ThrowIfLessThan(double value, double parameter, string message, string? property, string? code) =>
+        ThrowIf(value < parameter, message, property, code);
+
+    public static void ThrowIfLessThan(decimal value, decimal parameter, string message, string? property, string? code) =>
+        ThrowIf(value < parameter, message, property, code);
+
+    public static void ThrowIfGreaterThan(int value, double parameter, string message, string? property, string? code) =>
+        ThrowIf(value > parameter, message, property, code);
+
+    public static void ThrowIfGreaterThan(double value, double parameter, string message, string? property, string? code) =>
+        ThrowIf(value > parameter, message, property, code);
+
+    public static void ThrowIfGreaterThan(decimal value, decimal parameter, string message, string? property, string? code) =>
+        ThrowIf(value > parameter, message, property, code);
 
     public static void ThrowIf(bool condition, string message, string? property, string? code)
     {

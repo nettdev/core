@@ -1,10 +1,7 @@
 namespace Nett.Core;
 
 [ExcludeFromCodeCoverage]
-public class ValidationException : Exception
+public class ValidationException(IEnumerable<ErrorDetails> errors) : Exception("Validation Exception")
 {
-    public IEnumerable<ErrorDetails> Errors { get; }
-
-    public ValidationException(IEnumerable<ErrorDetails> errors) : base("Validation Exception") =>
-        Errors = errors;
+    public IEnumerable<ErrorDetails> Errors { get; } = errors;
 }
