@@ -10,15 +10,22 @@
     <AssemblyName>Nett.Core</AssemblyName>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/nettdev/core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nettdev/core</RepositoryUrl>
+    <PackageTags>clean architecture ddd repository aggregate result pattern</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Jeziel Moura</Authors>
+    <Copyright>Copyright 2024 Jeziel Moura</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="System.Diagnostics.CodeAnalysis" />
-    <Using Include="MediatR" />
+    <Using Include="Mediator" />
   </ItemGroup>
 
   <ItemGroup>
