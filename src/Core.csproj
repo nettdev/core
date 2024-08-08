@@ -20,12 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="System.Diagnostics.CodeAnalysis" />
-    <Using Include="Mediator" />
   </ItemGroup>
 
   <ItemGroup>

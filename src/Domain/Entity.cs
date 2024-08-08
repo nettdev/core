@@ -1,31 +1,14 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Nett.Core;
+﻿namespace Nett.Core;
 
 [ExcludeFromCodeCoverage]
 public class Entity : IEquatable<Entity>, IAggregateRoot
 {
-    private readonly List<INotification> _events;
-
-    [JsonIgnore]
-    public IReadOnlyCollection<INotification> Events => _events.AsReadOnly();
-
     public Guid Id { get; protected set; }
 
     protected Entity() 
     {
         Id = Guid.NewGuid();
-        _events = [];
     }
-
-    public void AddEvent(INotification @event) =>
-        _events.Add(@event);
-
-    public void RemoveEvent(INotification @event) =>
-        _events.Remove(@event);
-
-    public void ClearEvents() =>
-        _events.Clear();
 
     public static bool operator == (Entity a, Entity b) =>
         a.Equals(b);

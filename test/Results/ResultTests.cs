@@ -7,7 +7,7 @@ public class ResultTests
     public void WithErrorInstance_ShouldReturnIsFailureTrue()
     {
         //Arrange 
-        var error = new Error(Errors: []);
+        var error = new Error("", "", errors: []);
         
         //Act
         Result<Guid, Error> result = error;
@@ -30,7 +30,7 @@ public class ResultTests
     public void Match_WithErrorInstance_ShouldReturnIsFailureTrue()
     {
         //Arrange 
-        var error = new Error(Errors: []);
+        var error = new Error("", "", errors: []);
         Result<Guid, Error> result = error;
         
         //Act
@@ -44,7 +44,7 @@ public class ResultTests
     public void Match_WithDataInstance_ShouldReturnTrue()
     {
         //Arrange 
-        var error = new Error(Errors: []);
+        var error = new Error("", "", errors: []);
         Result<Guid, Error> result = Guid.NewGuid();
         
         //Act
