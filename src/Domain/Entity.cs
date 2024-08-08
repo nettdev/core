@@ -1,7 +1,7 @@
 ﻿namespace Nett.Core;
 
 [ExcludeFromCodeCoverage]
-public class Entity : IEquatable<Entity>, IAggregateRoot
+public class Entity : IEquatable<Entity>
 {
     public Guid Id { get; protected set; }
 
