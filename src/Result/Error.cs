@@ -10,11 +10,9 @@ public sealed class Error(string type, string title, IEnumerable<ErrorDetails> e
 {
     public string Type => type;
     public string Title => title;
-    public string? TraceId => Activity.Current?.Id;
+    public static string? TraceId => Activity.Current?.Id;
     public IEnumerable<ErrorDetails> Errors => errors;
     
-    private const string BadRequesRFC = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
-
     public static Error DefaultDatabaseError =>
-        new(BadRequesRFC, "BadRequest", [new("An error occurred while saving")]);
+        new("https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1", "BadRequest", [ new("An error occurred while saving") ]);
 }

@@ -20,6 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="System.Diagnostics.CodeAnalysis" />
   </ItemGroup>
 
