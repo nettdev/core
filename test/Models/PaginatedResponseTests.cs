@@ -2,6 +2,7 @@ using Nett.Core.Models;
 
 namespace Nett.Core.UnitTest.Models;
 
+[ExcludeFromCodeCoverage]
 public class PaginatedResponseTests
 {
     [Fact]
