@@ -1,5 +1,6 @@
 namespace Nett.Core.Models;
 
+[ExcludeFromCodeCoverage]
 public sealed record Address(
     string Street,
     string City,
