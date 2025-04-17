@@ -1,4 +1,6 @@
-namespace Nett.Core;
+using Nett.Core.Result;
+
+namespace Nett.Core.Exceptions;
 
 [ExcludeFromCodeCoverage]
 public class ValidationException(IEnumerable<ErrorDetails> errors) : Exception("Validation Exception")

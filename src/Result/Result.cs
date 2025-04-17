@@ -1,4 +1,4 @@
-namespace Nett.Core;
+namespace Nett.Core.Result;
 
 public class Result<TData, TError>
 {

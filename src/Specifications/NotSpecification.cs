@@ -1,4 +1,4 @@
-namespace Nett.Core;
+namespace Nett.Core.Specifications;
 
 public class NotSpecification<T> : ISpecification<T>
 {

@@ -1,6 +1,6 @@
-namespace Nett.Core;
+namespace Nett.Core.Models;
 
-public class PagedResponse<T>(IEnumerable<T> items, int count, int pageNumber, int limit)
+public class PaginatedResponse<T>(IEnumerable<T> items, int count, int pageNumber, int limit)
 {
     public int Current { get; } = pageNumber;
     public int Pages { get; } = (int)Math.Ceiling(count / (double)limit);

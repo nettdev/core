@@ -1,4 +1,6 @@
-namespace Nett.Core.UnitTest;
+using Nett.Core.Specifications;
+
+namespace Nett.Core.UnitTest.Specifications;
 
 [ExcludeFromCodeCoverage]
 public class SpecificationTest
@@ -73,14 +75,17 @@ public class SpecificationTest
     }
 }
 
+[ExcludeFromCodeCoverage]
 record User(bool IsAdmin, bool IsActive);
 
+[ExcludeFromCodeCoverage]
 class IsAdminSpec : ISpecification<User>
 {
     public bool IsSatisfiedBy(User user) => 
         user.IsAdmin;
 }
 
+[ExcludeFromCodeCoverage]
 class IsActiveSpec : ISpecification<User>
 {
     public bool IsSatisfiedBy(User user) => 

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Nett.Core;
+namespace Nett.Core.Result;
 
 [ExcludeFromCodeCoverage]
 public record ErrorDetails(string Message, string? Property = null, string? Code = null, string? Severity = null);

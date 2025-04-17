@@ -1,11 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <PublishAot>true</PublishAot>
     <RootNamespace>Nett.Core</RootNamespace>
     <AssemblyName>Nett.Core</AssemblyName>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -16,11 +15,11 @@
     <PackageTags>clean architecture ddd repository aggregate result pattern</PackageTags>
     <RepositoryType>git</RepositoryType>
     <Authors>Jeziel Moura</Authors>
-    <Copyright>Copyright 2024 Jeziel Moura</Copyright>
+    <Copyright>Copyright 2025 Jeziel Moura</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation" Version="12.0.0-preview1" />
   </ItemGroup>
 
   <ItemGroup>

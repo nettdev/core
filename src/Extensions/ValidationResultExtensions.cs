@@ -1,6 +1,7 @@
 using FluentValidation.Results;
+using Nett.Core.Result;
 
-namespace Nett.Core;
+namespace Nett.Core.Extensions;
 
 public static class ValidationResultExtensions
 {

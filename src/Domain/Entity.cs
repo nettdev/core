@@ -1,4 +1,4 @@
-﻿namespace Nett.Core;
+﻿namespace Nett.Core.Domain;
 
 [ExcludeFromCodeCoverage]
 public class Entity : IEquatable<Entity>

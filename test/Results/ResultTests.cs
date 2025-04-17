@@ -1,4 +1,6 @@
-namespace Nett.Core.UnitTest;
+using Nett.Core.Result;
+
+namespace Nett.Core.UnitTest.Results;
 
 [ExcludeFromCodeCoverage]
 public class ResultTests

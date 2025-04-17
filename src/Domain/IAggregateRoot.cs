@@ -1,3 +1,3 @@
-namespace Nett.Core;
+namespace Nett.Core.Domain;
 
 public interface IAggregateRoot;

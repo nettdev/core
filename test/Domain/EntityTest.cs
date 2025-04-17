@@ -1,4 +1,6 @@
-namespace Nett.Core.UnitTest;
+using Nett.Core.Domain;
+
+namespace Nett.Core.UnitTest.Domain;
 
 [ExcludeFromCodeCoverage]
 public class EntityTest
@@ -12,9 +14,6 @@ public class EntityTest
         //Assert
         Assert.NotEqual(entity.Id, Guid.Empty);
     }
-
-    private Entity CreateEntity() =>
-        new UserTest();
 }
 
 class UserTest : Entity { }

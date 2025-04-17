@@ -1,4 +1,4 @@
-namespace Nett.Core;
+namespace Nett.Core.Exceptions;
 
 [ExcludeFromCodeCoverage]
 public class AuthorizationException : Exception

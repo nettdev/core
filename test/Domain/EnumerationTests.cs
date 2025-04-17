@@ -1,4 +1,6 @@
-namespace Nett.Core.UnitTest;
+using Nett.Core.Domain;
+
+namespace Nett.Core.UnitTest.Domain;
 
 [ExcludeFromCodeCoverage]
 public class EnumerationTest
@@ -25,6 +27,7 @@ public class EnumerationTest
     }
 }
 
+[ExcludeFromCodeCoverage]
 class UserType(string name, int value) : Enumeration<UserType>(name, value)
 {
     public static UserType Editor = new (nameof(Editor), 0);

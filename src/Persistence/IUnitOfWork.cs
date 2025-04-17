@@ -1,7 +1,6 @@
-namespace Nett.Core;
+namespace Nett.Core.Persistence;
 
 public interface IUnitOfWork
 {
-    Task<Result<Guid, Error>> Commit(Guid id);
-    Task<Result<bool, Error>> Commit();
+    Task<bool> Commit();
 }
