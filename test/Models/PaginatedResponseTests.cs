@@ -6,6 +6,24 @@ namespace Nett.Core.UnitTest.Models;
 public class PaginatedResponseTests
 {
     [Fact]
+    public void ShouldReturnCorrectPageFirstItem()
+    {
+        var items = new List<int> { 1, 2, 3, 4, 5 };
+        var pagedResponse = new PaginatedResponse<int>(items, 25, 2, 5);
+
+        Assert.Equal(6, pagedResponse.PageFirstItem);
+    }
+
+    [Fact]
+    public void ShouldReturnCorrectPageLastItem()
+    {
+        var items = new List<int> { 1, 2, 3, 4, 5 };
+        var pagedResponse = new PaginatedResponse<int>(items, 25, 2, 5);
+
+        Assert.Equal(10, pagedResponse.PageLastItem);
+    }
+
+    [Fact]
     public void ShouldReturnCorrectCurrentPage()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };

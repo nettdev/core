@@ -1,10 +1,26 @@
+using FluentAssertions;
 using Nett.Core.Extensions;
+using Nett.Core.Specifications;
 
 namespace Nett.Core.UnitTest.Extensions;
 
 [ExcludeFromCodeCoverage]
 public class QueryableExtensionsTests
 {
+    [Fact]
+    public void CreateQuery_WithQuerySpecification_ShouldReturnFilteredList()
+    {
+        //Arrange
+       var query = new QuerySpecificationTest();
+       var people = GetPeople();
+    
+        //Act
+        var result = people.CreateQuery(query).ToList();
+    
+        //Assert
+        result[0].Should().Be("Bob");
+    }
+
     [Fact]
     public void OrderByColumn_SortsByAgeDescending()
     {
@@ -57,6 +73,21 @@ public class QueryableExtensionsTests
             var sorted = people.OrderByColumn("NonExistentProperty").ToList();
         });
     }
+
+    private class QuerySpecificationTest : QuerySpecification<Person, string>
+    {
+        public QuerySpecificationTest()
+        {
+            Query = query => query.Name != "";
+            OrderBy = query => query.Name;
+            Includes.Add(x => x.Address);
+            Take = 1;
+            Skip = 1;
+            IsSplitQuery = true;
+            IgnoreGlobalFilters = true;
+            Selector = query => query.Name;
+        }
+    } 
 
     private record Person(string Name, int Age, Address Address);
 

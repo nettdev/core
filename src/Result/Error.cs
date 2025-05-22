@@ -1,18 +1,17 @@
-using System.Diagnostics;
-
 namespace Nett.Core.Result;
 
 [ExcludeFromCodeCoverage]
-public record ErrorDetails(string Message, string? Property = null, string? Code = null, string? Severity = null);
+public record ErrorDetails(IEnumerable<string> Messages)
+{
+    public static implicit operator ErrorDetails(string error) => new([error]);
+}
 
 [ExcludeFromCodeCoverage]
-public sealed class Error(string type, string title, IEnumerable<ErrorDetails> errors)
+public sealed class Error(string title, ErrorDetails errors)
 {
-    public string Type => type;
     public string Title => title;
-    public static string? TraceId => Activity.Current?.Id;
-    public IEnumerable<ErrorDetails> Errors => errors;
+    public ErrorDetails Errors => errors;
     
     public static Error DefaultDatabaseError =>
-        new("https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1", "BadRequest", [ new("An error occurred while saving") ]);
+        new("An error occurred while saving", "DbConnection");
 }

@@ -12,8 +12,8 @@ public class DomainException : Exception
     public DomainException(string message, string? property = null, string? code = null) : base(message) =>
         (Property, Code) = (property, code);
 
-    public ErrorDetails MapToError() =>
-        new (Message, Property, Code, Severity);
+    public ErrorDetails MapToError() => 
+        Message;
 
     public static void ThrowIfNull(object? value, string message, string? property = null, string? code = null) =>
         ThrowIf(value is null, message, property, code);

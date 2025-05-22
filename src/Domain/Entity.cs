@@ -3,11 +3,11 @@
 [ExcludeFromCodeCoverage]
 public class Entity : IEquatable<Entity>
 {
-    public Guid Id { get; protected set; }
+    public Guid Id { get; init; }
 
     protected Entity() 
     {
-        Id = Guid.NewGuid();
+        Id = Guid.CreateVersion7();
     }
 
     public static bool operator == (Entity a, Entity b) =>
