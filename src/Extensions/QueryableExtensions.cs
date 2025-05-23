@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 using Nett.Core.Specifications;
 
 namespace Nett.Core.Extensions;
@@ -16,8 +15,8 @@ public static class QueryableExtensions
         if (specification.OrderByDesceding is {} orderByDesceding)
             query = query.OrderByDescending(orderByDesceding);
 
-        if (specification.Includes.Count > 0)
-            query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
+        // if (specification.Includes.Count > 0)
+        //     query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
 
         if (specification.Skip is {} skip)
             query = query.Skip(skip);
@@ -25,11 +24,11 @@ public static class QueryableExtensions
         if (specification.Take is {} take)
             query = query.Take(take);
 
-        if (specification.IsSplitQuery)
-            query = query.AsSplitQuery();
+        // if (specification.IsSplitQuery)
+        //     query = query.AsSplitQuery();
 
-        if (specification.IgnoreGlobalFilters)
-            query = query.IgnoreQueryFilters();
+        // if (specification.IgnoreGlobalFilters)
+        //     query = query.IgnoreQueryFilters();
 
         return query;
     }

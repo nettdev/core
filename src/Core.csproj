@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <InvariantGlobalization>true</InvariantGlobalization>
@@ -17,11 +17,6 @@
     <Authors>Jeziel Moura</Authors>
     <Copyright>Copyright 2025 Jeziel Moura</Copyright>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0-preview.3.25171.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0-preview.3.25171.6" />
-  </ItemGroup>
 
   <ItemGroup>
     <Using Include="System.Diagnostics.CodeAnalysis" />
