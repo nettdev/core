@@ -5,9 +5,12 @@ namespace Nett.Core.Extensions;
 
 public static class QueryableExtensions
 {
-    public static IQueryable<TEntity> CreateQuery<TEntity>(this IQueryable<TEntity> queryable, QuerySpecification<TEntity> specification) where TEntity : class
+    public static IQueryable<TEntity> Apply<TEntity>(this IQueryable<TEntity> queryable, QuerySpecification<TEntity> specification) where TEntity : class
     {
         IQueryable<TEntity> query = queryable;
+
+        if (specification.Predicate is {} predicate)
+            query = query.Where(predicate);
 
         if (specification.OrderBy is {} orderBy)
             query = query.OrderBy(orderBy);
@@ -15,27 +18,18 @@ public static class QueryableExtensions
         if (specification.OrderByDesceding is {} orderByDesceding)
             query = query.OrderByDescending(orderByDesceding);
 
-        // if (specification.Includes.Count > 0)
-        //     query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
-
         if (specification.Skip is {} skip)
             query = query.Skip(skip);
 
         if (specification.Take is {} take)
             query = query.Take(take);
 
-        // if (specification.IsSplitQuery)
-        //     query = query.AsSplitQuery();
-
-        // if (specification.IgnoreGlobalFilters)
-        //     query = query.IgnoreQueryFilters();
-
         return query;
     }
 
     public static IQueryable<TResult> CreateQuery<TEntity, TResult>(this IQueryable<TEntity> input, QuerySpecification<TEntity, TResult> specification) where TEntity : class
     {
-        var queryable = CreateQuery<TEntity>(input, specification);
+        var queryable = Apply(input, specification);
 
         if (specification.Selector is null)
             throw new ArgumentException("Selector cannot be null");

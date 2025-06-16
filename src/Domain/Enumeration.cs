@@ -18,6 +18,6 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>> where 
     public override int GetHashCode() =>
         Value.GetHashCode();
 
-    public override string ToString() => 
+    public override string ToString() =>
         Name;
 }

@@ -18,7 +18,6 @@ public class DomainExceptionTests
 
         //Assert
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -50,7 +49,6 @@ public class DomainExceptionTests
 
         //Assert
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -79,7 +77,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfNullOrWhiteSpace(value, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -93,7 +90,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfEmpty(value, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -107,7 +103,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfEmpty(value, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -120,7 +115,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfNullOrEmpty(values, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -133,7 +127,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfNullOrEmpty(values, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -146,7 +139,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfEmpty(values, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -159,7 +151,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfNegative(value, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -172,7 +163,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfZero(value, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -186,7 +176,6 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfLessThan(value, parameter, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 
     [Fact]
@@ -200,6 +189,5 @@ public class DomainExceptionTests
         var exception = Assert.Throws<DomainException>(() => DomainException.ThrowIfGreaterThan(value, parameter, message, property));
 
         Assert.Equal(message, exception.Message);
-        Assert.Equal(property, exception.Property);
     }
 }

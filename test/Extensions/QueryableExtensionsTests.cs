@@ -78,13 +78,10 @@ public class QueryableExtensionsTests
     {
         public QuerySpecificationTest()
         {
-            Query = query => query.Name != "";
+            Predicate = query => query.Name != "";
             OrderBy = query => query.Name;
-            Includes.Add(x => x.Address);
             Take = 1;
             Skip = 1;
-            IsSplitQuery = true;
-            IgnoreGlobalFilters = true;
             Selector = query => query.Name;
         }
     } 
