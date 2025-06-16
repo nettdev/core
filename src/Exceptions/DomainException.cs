@@ -12,7 +12,7 @@ public class DomainException : Exception
     public DomainException(string message, string? property = null, string? code = null) : base(message) =>
         (Property, Code) = (property, code);
 
-    public ErrorDetails MapToError() => 
+    public Error MapToError() => 
         Message;
 
     public static void ThrowIfNull(object? value, string message, string? property = null, string? code = null) =>

@@ -1,24 +1,33 @@
 namespace Nett.Core.Result;
 
-public class Result<TData, TError>
+public class Result<TValue, TError>
 {
-    public TData? Data { get; private init; }
-    public TError? Error { get; private init; }
-    public bool IsSuccess { get; private init; }
-    public bool IsFailure => IsSuccess is false;
+    public TValue? Value { get; protected init; }
+    public TError? Error { get; protected init; }
+    public bool IsSuccess { get; protected init; }
+    public bool IsFailure => !IsSuccess;
 
-    public static Result<TData, TError> Success(TData data) =>
-        new() { Data = data, Error = default, IsSuccess = true};
+    public static Result<TValue, TError> Success(TValue data) =>
+        new() { Value = data, Error = default, IsSuccess = true};
 
-    public static Result<TData, TError> Failure(TError error) =>
+    public static Result<TValue, TError> Failure(TError error) =>
         new() { Error = error, IsSuccess = false};
 
-    public static implicit operator Result<TData, TError>(TData data) => 
+    public static implicit operator Result<TValue, TError>(TValue data) => 
         Success(data);
     
-    public static implicit operator Result<TData, TError>(TError error) => 
+    public static implicit operator Result<TValue, TError>(TError error) => 
         Failure(error);
 
-    public TResult Match<TResult>(Func<TData, TResult> success, Func<TError, TResult> error) =>
-        IsSuccess ? success(Data!) : error(Error!);
+    public TResult Match<TResult>(Func<TValue, TResult> success, Func<TError, TResult> error) =>
+        IsSuccess ? success(Value!) : error(Error!);
+}
+
+public class Result<T> : Result<T, Error>
+{
+    public static implicit operator Result<T>(T value) => 
+        new() { Value = value, IsSuccess = true};
+    
+    public static implicit operator Result<T>(Error error) => 
+        new() { Error = error, IsSuccess = false };
 }
