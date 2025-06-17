@@ -5,15 +5,15 @@ public class Entity : IEquatable<Entity>
 {
     public Guid Id { get; init; }
 
-    protected Entity() 
+    protected Entity()
     {
         Id = Guid.CreateVersion7();
     }
 
-    public static bool operator == (Entity a, Entity b) =>
+    public static bool operator ==(Entity a, Entity b) =>
         a.Equals(b);
 
-    public static bool operator != (Entity a, Entity b) =>
+    public static bool operator !=(Entity a, Entity b) =>
         !(a == b);
 
     public override int GetHashCode() =>

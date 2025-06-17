@@ -11,7 +11,7 @@ public class EnumerationTest
         //Arrange && Act
         var editor1 = UserType.Editor;
         var editor2 = UserType.Editor;
-    
+
         //Assert
         Assert.Equal(editor1, editor2);
     }
@@ -21,7 +21,7 @@ public class EnumerationTest
     {
         //Arrange && Act
         var editor = UserType.Editor;
-    
+
         //Assert
         Assert.Equal("Editor", editor?.ToString());
     }
@@ -30,6 +30,6 @@ public class EnumerationTest
 [ExcludeFromCodeCoverage]
 class UserType(string name, int value) : Enumeration<UserType>(name, value)
 {
-    public static UserType Editor = new (nameof(Editor), 0);
-    public static UserType Admin = new (nameof(Admin), 1);
+    public static UserType Editor = new(nameof(Editor), 0);
+    public static UserType Admin = new(nameof(Admin), 1);
 }

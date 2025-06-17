@@ -1,99 +1,213 @@
+using System.Linq.Expressions;
 using FluentAssertions;
+using Nett.Core.Domain;
 using Nett.Core.Extensions;
-using Nett.Core.Specifications;
+using Nett.Core.Models;
+using NSubstitute.ExceptionExtensions;
 
 namespace Nett.Core.UnitTest.Extensions;
 
-[ExcludeFromCodeCoverage]
 public class QueryableExtensionsTests
 {
-    [Fact]
-    public void CreateQuery_WithQuerySpecification_ShouldReturnFilteredList()
+    private class TestEntity : Entity
     {
-        //Arrange
-       var query = new QuerySpecificationTest();
-       var people = GetPeople();
-    
-        //Act
-        var result = people.CreateQuery(query).ToList();
-    
-        //Assert
-        result[0].Should().Be("Bob");
+        public string Name { get; set; } = string.Empty;
+        public int Age { get; set; }
     }
 
-    [Fact]
-    public void OrderByColumn_SortsByAgeDescending()
+    private static IQueryable<TestEntity> GetTestQueryable()
     {
-        var people = GetPeople();
-        var sorted = people.OrderByColumn("Age", "desc").ToList();
-
-        Assert.Equal(35, sorted[0].Age);
-        Assert.Equal(30, sorted[1].Age);
-        Assert.Equal(25, sorted[2].Age);
-    }
-
-    [Fact]
-    public void ThenByColumn_SortsByNameThenAge()
-    {
-        var people = new List<Person>
+        return new List<TestEntity>
         {
-            new("Alex", 40, null!),
-            new("Alex", 30, null!),
-            new("Ben", 25, null!)
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), Name = "Charlie", Age = 30 },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Name = "Alice", Age = 25 },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), Name = "Bob", Age = 35 }
         }.AsQueryable();
+    }
 
-        var sorted = people
-            .OrderByColumn("Name")
-            .ThenByColumn("Age", "desc")
-            .ToList();
-
-        Assert.Equal(40, sorted[0].Age);  // Alex with age 40
-        Assert.Equal(30, sorted[1].Age);  // Alex with age 30
-        Assert.Equal("Ben", sorted[2].Name);
+    private static Dictionary<string, Expression<Func<TestEntity, object>>> GetSortMap()
+    {
+        return new Dictionary<string, Expression<Func<TestEntity, object>>>
+        {
+            { "name", x => x.Name },
+            { "age", x => x.Age }
+        };
     }
 
     [Fact]
-    public void OrderByColumn_SortsByNestedProperty()
+    public void ApplyOrderBy_OrderByAscending_ReturnsSortedQuery()
     {
-        var people = GetPeople();
-        var sorted = people.OrderByColumn("Address.City").ToList();
+        var queryable = GetTestQueryable();
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest { OrderBy = "name", OrderByDescending = false };
 
-        Assert.Equal("Amsterdam", sorted[0].Address.City);
-        Assert.Equal("Berlin", sorted[1].Address.City);
-        Assert.Equal("Zurich", sorted[2].Address.City);
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().BeInAscendingOrder(x => x.Name);
     }
 
     [Fact]
-    public void OrderByColumn_InvalidColumn_ThrowsException()
+    public void ApplyOrderBy_OrderByDescending_ReturnsSortedQuery()
     {
-        var people = GetPeople();
+        var queryable = GetTestQueryable();
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest { OrderBy = "name", OrderByDescending = true };
 
-        Assert.Throws<ArgumentException>(() =>
-        {
-            var sorted = people.OrderByColumn("NonExistentProperty").ToList();
-        });
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().BeInDescendingOrder(x => x.Name);
     }
 
-    private class QuerySpecificationTest : QuerySpecification<Person, string>
+    [Fact]
+    public void ApplyOrderBy_NoOrderBy_ReturnsSortedByIdDescending()
     {
-        public QuerySpecificationTest()
+        var queryable = GetTestQueryable();
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest { OrderBy = null };
+
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().BeInDescendingOrder(x => x.Id);
+    }
+
+    [Fact]
+    public void ApplyOrderBy_InvalidOrderByField_ThrowsArgumentException()
+    {
+        var queryable = GetTestQueryable();
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest { OrderBy = "invalidField" };
+
+        void act() => queryable.Apply(sortMap, request);
+
+        Assert.Throws<ArgumentException>(act);
+    }
+
+    [Fact]
+    public void ApplyThenBy_ThenByAscending_ReturnsSortedQuery()
+    {
+        var queryable = new List<TestEntity>
         {
-            Predicate = query => query.Name != "";
-            OrderBy = query => query.Name;
-            Take = 1;
-            Skip = 1;
-            Selector = query => query.Name;
-        }
-    } 
-
-    private record Person(string Name, int Age, Address Address);
-
-    private record Address(string City);
-
-    private static IQueryable<Person> GetPeople() => new List<Person>
-        {
-            new("Alice", 30, new Address("Zurich")),
-            new("Bob", 25, new Address("Amsterdam")),
-            new("Charlie", 35, new Address("Berlin"))
+            new() { Id = Guid.NewGuid(), Name = "Alice", Age = 30 },
+            new() { Id = Guid.NewGuid(), Name = "Bob", Age = 20 },
+            new() { Id = Guid.NewGuid(), Name = "Alice", Age = 25 }
         }.AsQueryable();
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest
+        {
+            OrderBy = "name",
+            OrderByDescending = false,
+            ThenBy = "age",
+            ThenByDescending = false
+        };
+
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().ContainInOrder(
+            queryable.Where(x => x.Name == "Alice").OrderBy(x => x.Age).First(),
+            queryable.Where(x => x.Name == "Alice").OrderByDescending(x => x.Age).First(),
+            queryable.Where(x => x.Name == "Bob").First()
+        );
+    }
+
+    [Fact]
+    public void ApplyThenBy_ThenByDescending_ReturnsSortedQuery()
+    {
+        var queryable = new List<TestEntity>
+        {
+            new() { Id = Guid.NewGuid(), Name = "Alice", Age = 30 },
+            new() { Id = Guid.NewGuid(), Name = "Bob", Age = 20 },
+            new() { Id = Guid.NewGuid(), Name = "Alice", Age = 25 }
+        }.AsQueryable();
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest
+        {
+            OrderBy = "name",
+            OrderByDescending = false,
+            ThenBy = "age",
+            ThenByDescending = true
+        };
+
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().ContainInOrder(
+            queryable.Where(x => x.Name == "Alice").OrderByDescending(x => x.Age).First(),
+            queryable.Where(x => x.Name == "Alice").OrderBy(x => x.Age).First(),
+            queryable.Where(x => x.Name == "Bob").First()
+        );
+    }
+
+    [Fact]
+    public void ApplyThenBy_NoThenBy_ReturnsCorrectlyOrderedQuery()
+    {
+        var queryable = GetTestQueryable();
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest
+        {
+            OrderBy = "name",
+            OrderByDescending = false,
+            ThenBy = null
+        };
+
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().BeInAscendingOrder(x => x.Name);
+    }
+
+    [Fact]
+    public void ApplyPagination_ValidPageAndLimit_ReturnsPaginatedQuery()
+    {
+        var queryable = GetTestQueryable().OrderBy(x => x.Id); // Ensure consistent order for pagination
+        var sortMap = GetSortMap(); // Sort map is not directly used by pagination, but needed for Apply method
+        var request = new PaginatedRequest { Page = 2, Limit = 1 };
+
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().HaveCount(1);
+        result.First().Id.Should().Be(Guid.Parse("00000000-0000-0000-0000-000000000002"));
+    }
+
+    [Fact]
+    public void ApplyPagination_PageLessThanOne_ReturnsFirstPage()
+    {
+        var queryable = GetTestQueryable().OrderByDescending(x => x.Id);
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest { Page = 0, Limit = 2 };
+
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().HaveCount(2);
+        result.First().Id.Should().Be(Guid.Parse("00000000-0000-0000-0000-000000000003"));
+    }
+
+    [Fact]
+    public void ApplyPagination_LimitLessThanOrEqualToZero_UsesDefaultPaginationLimit()
+    {
+        var queryable = GetTestQueryable().OrderBy(x => x.Id);
+        var sortMap = GetSortMap();
+        var request = new PaginatedRequest { Page = 1, Limit = 0 }; // Limit is 0, should use default 10
+
+        var result = queryable.Apply(sortMap, request).ToList();
+
+        result.Should().HaveCount(3); // All 3 items should be returned if PaginationLimit is 10
+    }
+
+    [Fact]
+    public void Filter_ApplyTrue_ReturnsFilteredQuery()
+    {
+        var queryable = GetTestQueryable();
+
+        var result = queryable.Filter(true, x => x.Age > 25).ToList();
+
+        result.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void Filter_ApplyFalse_ReturnsUnfilteredQuery()
+    {
+        var queryable = GetTestQueryable();
+
+        var result = queryable.Filter(false, x => x.Age > 25).ToList();
+
+        result.Should().HaveCount(3); // All items should be returned
+    }
 }

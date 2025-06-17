@@ -135,8 +135,8 @@ public class ResultTests
         var successFunc = Substitute.For<Func<string, int>>();
         var errorFunc = Substitute.For<Func<Error, int>>();
 
-        successFunc.Invoke(SuccessValue).Returns(1); 
-        errorFunc.Invoke(Arg.Any<Error>()).Returns(0); 
+        successFunc.Invoke(SuccessValue).Returns(1);
+        errorFunc.Invoke(Arg.Any<Error>()).Returns(0);
 
         // Act
         var matchResult = result.Match(successFunc, errorFunc);
@@ -155,8 +155,8 @@ public class ResultTests
         var successFunc = Substitute.For<Func<string, int>>();
         var errorFunc = Substitute.For<Func<Error, int>>();
 
-        successFunc.Invoke(Arg.Any<string>()).Returns(1); 
-        errorFunc.Invoke(CustomErr).Returns(0); 
+        successFunc.Invoke(Arg.Any<string>()).Returns(1);
+        errorFunc.Invoke(CustomErr).Returns(0);
 
         // Act
         var matchResult = result.Match(successFunc, errorFunc);

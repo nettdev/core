@@ -1,72 +1,56 @@
 using System.Linq.Expressions;
-using Nett.Core.Specifications;
+using Nett.Core.Domain;
+using Nett.Core.Models;
 
 namespace Nett.Core.Extensions;
 
 public static class QueryableExtensions
 {
-    public static IQueryable<TEntity> Apply<TEntity>(this IQueryable<TEntity> queryable, QuerySpecification<TEntity> specification) where TEntity : class
+    public const int PaginationLimit = 10;
+
+    public static IQueryable<T> Apply<T>(this IQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request) where T : Entity
     {
-        IQueryable<TEntity> query = queryable;
+        var query = ApplyOrderBy(queryable, sortMap, request);
+        var orderedQuery = ApplyThenBy(query, sortMap, request);
+        var paginatedQuery = ApplyPagination(orderedQuery, request);
 
-        if (specification.Predicate is {} predicate)
-            query = query.Where(predicate);
-
-        if (specification.OrderBy is {} orderBy)
-            query = query.OrderBy(orderBy);
-
-        if (specification.OrderByDesceding is {} orderByDesceding)
-            query = query.OrderByDescending(orderByDesceding);
-
-        if (specification.Skip is {} skip)
-            query = query.Skip(skip);
-
-        if (specification.Take is {} take)
-            query = query.Take(take);
-
-        return query;
+        return paginatedQuery;
     }
 
-    public static IQueryable<TResult> CreateQuery<TEntity, TResult>(this IQueryable<TEntity> input, QuerySpecification<TEntity, TResult> specification) where TEntity : class
+    public static IQueryable<T> Filter<T>(this IQueryable<T> query, bool apply, Expression<Func<T, bool>> predicate)
     {
-        var queryable = Apply(input, specification);
-
-        if (specification.Selector is null)
-            throw new ArgumentException("Selector cannot be null");
-
-        return queryable.Select(specification.Selector);
+        return apply ? query.Where(predicate) : query;
     }
 
-    public static IQueryable<T> Filter<T>(this IQueryable<T> query, bool apply, Expression<Func<T, bool>> predicate) 
+    private static IOrderedQueryable<T> ApplyOrderBy<T>(IQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request) where T : Entity
     {
-        return apply ? query.Where(predicate) : query; 
-    }
-    
-    public static IOrderedQueryable<T> OrderByColumn<T>(this IQueryable<T> source, string columnPath, string direction = "asc")
-    {
-        return direction.ToLower() switch
-        {
-            "desc" => source.OrderByColumnUsing(columnPath, "OrderByDescending"),
-            _ => source.OrderByColumnUsing(columnPath, "OrderBy")
-        };
+        if (request.OrderBy is { } orderByDesc && request.OrderByDescending)
+            return queryable.OrderByDescending(GetExpression(sortMap, orderByDesc));
+
+        if (request.OrderBy is { } orderBy)
+            return queryable.OrderBy(GetExpression(sortMap, orderBy));
+
+        return queryable.OrderByDescending(x => x.Id);
     }
 
-    public static IOrderedQueryable<T> ThenByColumn<T>(this IOrderedQueryable<T> source, string columnPath, string direction = "asc") 
+    private static IOrderedQueryable<T> ApplyThenBy<T>(IOrderedQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request)
     {
-        return direction.ToLower() switch
-        {
-            "desc" => source.OrderByColumnUsing(columnPath, "ThenByDescending"),
-            _ => source.OrderByColumnUsing(columnPath, "ThenBy")
-        };
+        if (request.ThenBy is { } thenBy && !request.ThenByDescending)
+            return queryable.ThenBy(GetExpression(sortMap, thenBy));
+
+        if (request.ThenBy is { } thenByDesc && request.ThenByDescending)
+            return queryable.ThenByDescending(GetExpression(sortMap, thenByDesc));
+
+        return queryable;
     }
 
-    private static IOrderedQueryable<T> OrderByColumnUsing<T>(this IQueryable<T> source, string columnPath, string method)
+    private static IQueryable<T> ApplyPagination<T>(IOrderedQueryable<T> queryable, PaginatedRequest request)
     {
-        var parameter = Expression.Parameter(typeof(T), "item");
-        var member = columnPath.Split('.').Aggregate((Expression)parameter, Expression.PropertyOrField);
-        var keySelector = Expression.Lambda(member, parameter);
-        var methodCall = Expression.Call(typeof(Queryable), method, [parameter.Type, member.Type], source.Expression, Expression.Quote(keySelector));
-
-        return (IOrderedQueryable<T>)source.Provider.CreateQuery(methodCall);
+        var page = Math.Max(1, request.Page);
+        var limit = request.Limit > 0 ? request.Limit : PaginationLimit;
+        return queryable.Skip((page - 1) * limit).Take(limit);
     }
+
+    private static Expression<Func<T, object>> GetExpression<T>(Dictionary<string, Expression<Func<T, object>>> sortMap, string key) =>
+        sortMap.TryGetValue(key, out var expression) ? expression : throw new ArgumentException($"Invalid sort field: {key}");
 }

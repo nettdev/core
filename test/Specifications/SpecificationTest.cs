@@ -81,13 +81,13 @@ record User(bool IsAdmin, bool IsActive);
 [ExcludeFromCodeCoverage]
 class IsAdminSpec : ISpecification<User>
 {
-    public bool IsSatisfiedBy(User user) => 
+    public bool IsSatisfiedBy(User user) =>
         user.IsAdmin;
 }
 
 [ExcludeFromCodeCoverage]
 class IsActiveSpec : ISpecification<User>
 {
-    public bool IsSatisfiedBy(User user) => 
+    public bool IsSatisfiedBy(User user) =>
         user.IsActive;
 }

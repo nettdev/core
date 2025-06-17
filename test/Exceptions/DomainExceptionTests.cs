@@ -30,7 +30,7 @@ public class DomainExceptionTests
 
         //Act
         var exception = Record.Exception(() => DomainException.ThrowIfNull(value, message, property));
-        
+
         //Assert
         Assert.Null(exception);
     }
@@ -61,7 +61,7 @@ public class DomainExceptionTests
 
         //Act
         var exception = Record.Exception(() => DomainException.ThrowIfNullOrEmpty(value, message, property));
-        
+
         //Assert
         Assert.Null(exception);
     }
