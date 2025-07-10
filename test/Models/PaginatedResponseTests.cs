@@ -9,7 +9,7 @@ public class PaginatedResponseTests
     public void ShouldReturnCorrectPageFirstItem()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 25, 2, 5);
+        var pagedResponse = new PaginatedResponse<int>(items, 25, new PaginatedRequest { Page = 2, Limit = 5 });
 
         Assert.Equal(6, pagedResponse.PageFirstItem);
     }
@@ -18,7 +18,7 @@ public class PaginatedResponseTests
     public void ShouldReturnCorrectPageLastItem()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 25, 2, 5);
+        var pagedResponse = new PaginatedResponse<int>(items, 25, new PaginatedRequest { Page = 2, Limit = 5 });
 
         Assert.Equal(10, pagedResponse.PageLastItem);
     }
@@ -27,7 +27,7 @@ public class PaginatedResponseTests
     public void ShouldReturnCorrectCurrentPage()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 1, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 1, Limit = 2 });
 
         Assert.Equal(1, pagedResponse.Current);
     }
@@ -36,7 +36,7 @@ public class PaginatedResponseTests
     public void ShouldReturnCorrectLimit()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 1, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 1, Limit = 2 });
 
         Assert.Equal(2, pagedResponse.Limit);
     }
@@ -45,7 +45,7 @@ public class PaginatedResponseTests
     public void ShouldReturnCorrectTotal()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 1, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 1, Limit = 2 });
 
         Assert.Equal(5, pagedResponse.Total);
     }
@@ -54,7 +54,7 @@ public class PaginatedResponseTests
     public void ShouldReturnTrueForHasPrevWhenCurrentIsGreaterThanOne()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 2, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 2, Limit = 2 });
 
         Assert.True(pagedResponse.HasPrev);
     }
@@ -63,7 +63,7 @@ public class PaginatedResponseTests
     public void ShouldReturnFalseForHasPrevWhenCurrentIsOne()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 1, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 1, Limit = 2 });
 
         Assert.False(pagedResponse.HasPrev);
     }
@@ -72,7 +72,7 @@ public class PaginatedResponseTests
     public void ShouldReturnTrueForHasNextWhenCurrentIsLessThanPages()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 1, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 1, Limit = 2 });
 
         Assert.True(pagedResponse.HasNext);
     }
@@ -81,7 +81,7 @@ public class PaginatedResponseTests
     public void ShouldReturnFalseForHasNextWhenCurrentIsEqualToPages()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 3, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 3, Limit = 2 });
 
         Assert.False(pagedResponse.HasNext);
     }
@@ -90,7 +90,7 @@ public class PaginatedResponseTests
     public void ShouldReturnCorrectItems()
     {
         var items = new List<int> { 1, 2, 3, 4, 5 };
-        var pagedResponse = new PaginatedResponse<int>(items, 5, 1, 2);
+        var pagedResponse = new PaginatedResponse<int>(items, 5, new PaginatedRequest { Page = 1, Limit = 2 });
 
         Assert.Equal(items, pagedResponse.Items);
     }
