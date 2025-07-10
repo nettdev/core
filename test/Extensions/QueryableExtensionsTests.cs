@@ -15,6 +15,8 @@ public class QueryableExtensionsTests
         public int Age { get; set; }
     }
 
+    private static Expression<Func<TestEntity, TestEntity>> _map = x => x;
+
     private static IQueryable<TestEntity> GetTestQueryable()
     {
         return new List<TestEntity>
@@ -41,7 +43,7 @@ public class QueryableExtensionsTests
         var sortMap = GetSortMap();
         var request = new PaginatedRequest { OrderBy = "name", OrderByDescending = false };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap, _map, request).ToList();
 
         result.Should().BeInAscendingOrder(x => x.Name);
     }
@@ -53,7 +55,7 @@ public class QueryableExtensionsTests
         var sortMap = GetSortMap();
         var request = new PaginatedRequest { OrderBy = "name", OrderByDescending = true };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap, _map, request).ToList();
 
         result.Should().BeInDescendingOrder(x => x.Name);
     }
@@ -65,7 +67,7 @@ public class QueryableExtensionsTests
         var sortMap = GetSortMap();
         var request = new PaginatedRequest { OrderBy = null };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap, _map, request).ToList();
 
         result.Should().BeInDescendingOrder(x => x.Id);
     }
@@ -77,7 +79,7 @@ public class QueryableExtensionsTests
         var sortMap = GetSortMap();
         var request = new PaginatedRequest { OrderBy = "invalidField" };
 
-        void act() => queryable.Apply(sortMap, request);
+        void act() => queryable.Apply(sortMap, _map, request);
 
         Assert.Throws<ArgumentException>(act);
     }
@@ -100,7 +102,7 @@ public class QueryableExtensionsTests
             ThenByDescending = false
         };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap,_map, request).ToList();
 
         result.Should().ContainInOrder(
             queryable.Where(x => x.Name == "Alice").OrderBy(x => x.Age).First(),
@@ -127,7 +129,7 @@ public class QueryableExtensionsTests
             ThenByDescending = true
         };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap,_map, request).ToList();
 
         result.Should().ContainInOrder(
             queryable.Where(x => x.Name == "Alice").OrderByDescending(x => x.Age).First(),
@@ -148,7 +150,7 @@ public class QueryableExtensionsTests
             ThenBy = null
         };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap, _map, request).ToList();
 
         result.Should().BeInAscendingOrder(x => x.Name);
     }
@@ -160,7 +162,7 @@ public class QueryableExtensionsTests
         var sortMap = GetSortMap(); // Sort map is not directly used by pagination, but needed for Apply method
         var request = new PaginatedRequest { Page = 2, Limit = 1 };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap, _map, request).ToList();
 
         result.Should().HaveCount(1);
         result.First().Id.Should().Be(Guid.Parse("00000000-0000-0000-0000-000000000002"));
@@ -173,7 +175,7 @@ public class QueryableExtensionsTests
         var sortMap = GetSortMap();
         var request = new PaginatedRequest { Limit = 2 };
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sortMap, _map, request).ToList();
 
         result.Should().HaveCount(2);
         result.First().Id.Should().Be(Guid.Parse("00000000-0000-0000-0000-000000000003"));
@@ -183,10 +185,10 @@ public class QueryableExtensionsTests
     public void ApplyPagination_LimitNotInformed_UsesDefaultPaginationLimit()
     {
         var queryable = GetTestQueryable().OrderBy(x => x.Id);
-        var sortMap = GetSortMap();
+        var sort = GetSortMap();
         var request = new PaginatedRequest { Page = 1 }; // Limit is 0, should use default 10
 
-        var result = queryable.Apply(sortMap, request).ToList();
+        var result = queryable.Apply(sort, _map, request).ToList();
 
         result.Should().HaveCount(3); // All 3 items should be returned if PaginationLimit is 10
     }

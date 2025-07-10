@@ -9,13 +9,13 @@ public static class QueryableExtensions
     public const int PaginationLimit = 10;
     public const int InitialPage = 1;
 
-    public static IQueryable<T> Apply<T>(this IQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request) where T : Entity
+    public static IQueryable<R> Apply<T, R>(this IQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sort, Expression<Func<T, R>> map, PaginatedRequest request) where T : Entity
     {
-        var query = ApplyOrderBy(queryable, sortMap, request);
-        var orderedQuery = ApplyThenBy(query, sortMap, request);
+        var orderedQuery = ApplyOrderBy(queryable, sort, request).ApplyThenBy(sort, request);
         var paginatedQuery = ApplyPagination(orderedQuery, request);
+        var projected = paginatedQuery.Select(map);
 
-        return paginatedQuery;
+        return projected;
     }
 
     public static IQueryable<T> Filter<T>(this IQueryable<T> query, bool apply, Expression<Func<T, bool>> predicate)
@@ -34,7 +34,7 @@ public static class QueryableExtensions
         return queryable.OrderByDescending(x => x.Id);
     }
 
-    private static IOrderedQueryable<T> ApplyThenBy<T>(IOrderedQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request)
+    private static IOrderedQueryable<T> ApplyThenBy<T>(this IOrderedQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request)
     {
         if (request.ThenBy is { } thenBy && !request.ThenByDescending)
             return queryable.ThenBy(GetExpression(sortMap, thenBy));
