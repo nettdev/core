@@ -4,6 +4,7 @@ using Nett.Core.Result;
 
 namespace Nett.Core.UnitTest.Results;
 
+[ExcludeFromCodeCoverage]
 public class ResultTests
 {
     private const string SuccessValue = "SuccessData";

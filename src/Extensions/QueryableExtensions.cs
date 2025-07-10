@@ -7,6 +7,7 @@ namespace Nett.Core.Extensions;
 public static class QueryableExtensions
 {
     public const int PaginationLimit = 10;
+    public const int InitialPage = 1;
 
     public static IQueryable<T> Apply<T>(this IQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request) where T : Entity
     {
@@ -46,8 +47,8 @@ public static class QueryableExtensions
 
     private static IQueryable<T> ApplyPagination<T>(IOrderedQueryable<T> queryable, PaginatedRequest request)
     {
-        var page = Math.Max(1, request.Page);
-        var limit = request.Limit > 0 ? request.Limit : PaginationLimit;
+        var page = request.Page ?? InitialPage;
+        var limit = request.Limit ?? PaginationLimit;
         return queryable.Skip((page - 1) * limit).Take(limit);
     }
 

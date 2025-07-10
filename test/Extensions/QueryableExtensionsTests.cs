@@ -3,10 +3,10 @@ using FluentAssertions;
 using Nett.Core.Domain;
 using Nett.Core.Extensions;
 using Nett.Core.Models;
-using NSubstitute.ExceptionExtensions;
 
 namespace Nett.Core.UnitTest.Extensions;
 
+[ExcludeFromCodeCoverage]
 public class QueryableExtensionsTests
 {
     private class TestEntity : Entity
@@ -167,11 +167,11 @@ public class QueryableExtensionsTests
     }
 
     [Fact]
-    public void ApplyPagination_PageLessThanOne_ReturnsFirstPage()
+    public void ApplyPagination_PageNotInformed_ReturnsFirstPage()
     {
         var queryable = GetTestQueryable().OrderByDescending(x => x.Id);
         var sortMap = GetSortMap();
-        var request = new PaginatedRequest { Page = 0, Limit = 2 };
+        var request = new PaginatedRequest { Limit = 2 };
 
         var result = queryable.Apply(sortMap, request).ToList();
 
@@ -180,11 +180,11 @@ public class QueryableExtensionsTests
     }
 
     [Fact]
-    public void ApplyPagination_LimitLessThanOrEqualToZero_UsesDefaultPaginationLimit()
+    public void ApplyPagination_LimitNotInformed_UsesDefaultPaginationLimit()
     {
         var queryable = GetTestQueryable().OrderBy(x => x.Id);
         var sortMap = GetSortMap();
-        var request = new PaginatedRequest { Page = 1, Limit = 0 }; // Limit is 0, should use default 10
+        var request = new PaginatedRequest { Page = 1 }; // Limit is 0, should use default 10
 
         var result = queryable.Apply(sortMap, request).ToList();
 
