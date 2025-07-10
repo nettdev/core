@@ -25,7 +25,7 @@ public static class QueryableExtensions
 
     private static IOrderedQueryable<T> ApplyOrderBy<T>(IQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request) where T : Entity
     {
-        if (request.OrderBy is { } orderByDesc && request.OrderByDescending)
+        if (request.OrderBy is { } orderByDesc && request.OrderByDescending is true)
             return queryable.OrderByDescending(GetExpression(sortMap, orderByDesc));
 
         if (request.OrderBy is { } orderBy)
@@ -36,10 +36,10 @@ public static class QueryableExtensions
 
     private static IOrderedQueryable<T> ApplyThenBy<T>(this IOrderedQueryable<T> queryable, Dictionary<string, Expression<Func<T, object>>> sortMap, PaginatedRequest request)
     {
-        if (request.ThenBy is { } thenBy && !request.ThenByDescending)
+        if (request.ThenBy is { } thenBy && !request.ThenByDescending is true)
             return queryable.ThenBy(GetExpression(sortMap, thenBy));
 
-        if (request.ThenBy is { } thenByDesc && request.ThenByDescending)
+        if (request.ThenBy is { } thenByDesc && request.ThenByDescending is true)
             return queryable.ThenByDescending(GetExpression(sortMap, thenByDesc));
 
         return queryable;
