@@ -1,0 +1,68 @@
+name: deploy
+on:
+  release:
+    types: [published, edited]
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: setup
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: restore
+      run: dotnet restore
+
+    - name: build
+      run: dotnet build --configuration Release --no-restore
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: setup
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: restore
+      run: dotnet restore
+
+    - name: test
+      run: dotnet test --no-restore tests/UnitTests.csproj
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      id-token: write
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: nuget login
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: nett
+
+    - name: setup
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: dotnet pack
+      run: dotnet pack "src/Core.csproj" /p:PackageVersion=${{ github.ref_name }} -c Release -o ./dist
+
+    - name: nuget publish
+      run: dotnet nuget push "./dist/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json

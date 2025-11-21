@@ -1,0 +1,44 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"type": "dotnet",
+			"task": "build",
+			"presentation": {
+				"reveal": "silent",
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "examples",
+			"command": "dotnet",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/examples"
+			},
+			"args": [
+				"watch",
+				"-e",
+				"ASPNETCORE_ENVIRONMENT=Development",
+				"--",
+				"--urls",
+				"https://localhost:5000"
+			],
+			"presentation": {
+				"panel": "dedicated",
+				"clear": true,
+				"reveal": "silent",
+				"showReuseMessage": false
+			},
+			"problemMatcher": "$msCompile"
+		}
+	]
+}

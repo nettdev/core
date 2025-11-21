@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RootNamespace>Nett.Core</RootNamespace>
+    <AssemblyName>Nett.Core</AssemblyName>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/nettdev/core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nettdev/core</RepositoryUrl>
+    <PackageTags>clean architecture ddd repository aggregate result pattern</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Jeziel Moura</Authors>
+    <Copyright>Copyright 2025 Jeziel Moura</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../docs/icon.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

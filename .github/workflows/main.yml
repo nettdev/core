@@ -1,0 +1,45 @@
+name: main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: setup
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: restore
+      run: dotnet restore
+
+    - name: build
+      run: dotnet build --configuration Release --no-restore
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: setup
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+      
+    - name: test
+      run: dotnet test tests/UnitTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+    - name: coverage
+      uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
