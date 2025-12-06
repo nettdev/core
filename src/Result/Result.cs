@@ -6,8 +6,11 @@ public class Result<TValue, TError>
     public TError? Error { get; protected init; }
 
     [MemberNotNullWhen(true, nameof(Value))]
+    [MemberNotNullWhen(false, nameof(Error))]
     public bool IsSuccess { get; protected init; }
+    
     [MemberNotNullWhen(false, nameof(Value))]
+    [MemberNotNullWhen(true, nameof(Error))]
     public bool IsFailure => !IsSuccess;
 
     public static Result<TValue, TError> Success(TValue data) =>
