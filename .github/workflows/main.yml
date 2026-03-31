@@ -15,7 +15,7 @@ jobs:
     - name: setup
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '10.0.x'
+        dotnet-version: '11.0.x'
 
     - name: restore
       run: dotnet restore
@@ -34,7 +34,7 @@ jobs:
     - name: setup
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '10.0.x'
+        dotnet-version: '11.0.x'
       
     - name: test
       run: dotnet test tests/UnitTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
