@@ -4,9 +4,9 @@ public sealed class PagedResponse<T>(IEnumerable<T> items, int count, int page, 
 {
     public int Page => page;
     public int Limit => limit;
-    public int TotalPages => (int)Math.Ceiling(count / (double)limit);
-    public int TotalCount => count;
+    public int Pages => (int)Math.Ceiling(count / (double)limit);
+    public int Count => count;
     public bool HasPrev => Page > 1;
-    public bool HasNext => Page < TotalPages;
+    public bool HasNext => Page < Pages;
     public IEnumerable<T> Items => items;
 }

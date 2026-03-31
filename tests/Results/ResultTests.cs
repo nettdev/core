@@ -1,5 +1,5 @@
 using NSubstitute;
-using Nett.Core.Result;
+using Nett.Core.Results;
 using Shouldly;
 
 namespace Nett.Core.UnitTest.Results;
@@ -121,7 +121,7 @@ public class ResultTests
     public void ResultGeneric_Success_SetsIsSuccessAndValue()
     {
         // Act
-        var result = Result<string>.Success(SuccessValue);
+        var result = Result<string, Error>.Success(SuccessValue);
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
@@ -134,7 +134,7 @@ public class ResultTests
     public void ResultGeneric_Failure_SetsIsFailureAndError()
     {
         // Act
-        var result = Result<string>.Failure(CommonError);
+        var result = Result<string, Error>.Failure(CommonError);
 
         // Assert
         result.IsSuccess.ShouldBeFalse();
@@ -147,7 +147,7 @@ public class ResultTests
     public void ResultGeneric_ImplicitOperatorFromValue_CreatesSuccessResult()
     {
         // Act
-        Result<string> result = SuccessValue;
+        Result<string, Error> result = SuccessValue;
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
@@ -158,7 +158,7 @@ public class ResultTests
     public void ResultGeneric_ImplicitOperatorFromError_CreatesFailureResult()
     {
         // Act
-        Result<string> result = CommonError;
+        Result<string, Error> result = CommonError;
 
         // Assert
         result.IsFailure.ShouldBeTrue();
@@ -169,7 +169,7 @@ public class ResultTests
     public void ResultGeneric_Match_SuccessScenario_ExecutesSuccessFunc()
     {
         // Arrange
-        var result = Result<string>.Success(SuccessValue);
+        var result = Result<string, Error>.Success(SuccessValue);
         var successFunc = Substitute.For<Func<string, int>>();
         var errorFunc = Substitute.For<Func<Error, int>>();
 
@@ -189,7 +189,7 @@ public class ResultTests
     public void ResultGeneric_Match_FailureScenario_ExecutesErrorFunc()
     {
         // Arrange
-        var result = Result<string>.Failure(CommonError);
+        var result = Result<string, Error>.Failure(CommonError);
         var successFunc = Substitute.For<Func<string, int>>();
         var errorFunc = Substitute.For<Func<Error, int>>();
 

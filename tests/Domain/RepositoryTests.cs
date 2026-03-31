@@ -63,7 +63,7 @@ public class RepositoryTests
         var result = await _repository.Query(request, CancellationToken.None);
 
         Assert.Equal(2, result.Items.Count());
-        Assert.Equal(3, result.TotalCount);
+        Assert.Equal(3, result.Count);
         Assert.Equal(1, result.Page);
         Assert.Equal(2, result.Limit);
     }
@@ -75,7 +75,7 @@ public class RepositoryTests
         var result = await _repository.Query(request, CancellationToken.None);
 
         result.Items.ShouldHaveSingleItem();
-        result.TotalCount.ShouldBeEquivalentTo(1);
+        result.Count.ShouldBeEquivalentTo(1);
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class RepositoryTests
 
         Assert.Single(result.Items);
         Assert.Equal("Bob", result.Items.First());
-        Assert.Equal(3, result.TotalCount);
+        Assert.Equal(3, result.Count);
     }
 
     [Fact]

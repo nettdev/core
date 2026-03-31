@@ -29,7 +29,7 @@ public class PaginatedResponseTests
         var items = new List<int> { 1, 2, 3, 4, 5 };
         var pagedResponse = new PagedResponse<int>(items, count: 5, page: 1, limit: 2 );
 
-        Assert.Equal(5, pagedResponse.TotalCount);
+        Assert.Equal(5, pagedResponse.Count);
     }
 
     [Fact]

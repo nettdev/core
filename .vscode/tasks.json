@@ -3,8 +3,12 @@
 	"tasks": [
 		{
 			"label": "build",
-			"type": "dotnet",
-			"task": "build",
+			"command": "dotnet",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"args": ["build"],
 			"presentation": {
 				"reveal": "silent",
 				"panel": "dedicated",

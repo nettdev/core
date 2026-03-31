@@ -10,6 +10,8 @@ public abstract class Repository<T> : IRepository<T> where T : AggregateRoot
     protected abstract IQueryable<T> Queryable { get; }
     protected abstract Dictionary<string, Expression<Func<T, object>>> SortMap { get; }
 
+    public IQueryable<T> Query() => Queryable;
+
     public async Task<PagedResponse<R>> Query<R>(PagedRequest<T, R> request, CancellationToken cancellation)
     {
         var page = request.Page ?? 1;

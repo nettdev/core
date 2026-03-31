@@ -1,4 +1,4 @@
-namespace Nett.Core.Result;
+namespace Nett.Core.Results;
 
 public class Result<TValue, TError>
 {
@@ -28,13 +28,3 @@ public class Result<TValue, TError>
     public TResult Match<TResult>(Func<TValue, TResult> success, Func<TError, TResult> error) =>
         IsSuccess ? success(Value!) : error(Error!);
 }
-
-public class Result<T> : Result<T, Error>
-{
-    public static implicit operator Result<T>(T value) =>
-        new() { Value = value, IsSuccess = true };
-
-    public static implicit operator Result<T>(Error error) =>
-        new() { Error = error, IsSuccess = false };
-}
-
