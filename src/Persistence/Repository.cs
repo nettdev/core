@@ -15,7 +15,7 @@ public abstract class Repository<T> : IRepository<T> where T : AggregateRoot
     public async Task<PagedResponse<R>> Query<R>(PagedRequest<T, R> request, CancellationToken cancellation)
     {
         var page = request.Page ?? 1;
-        var limit = request.Limit ?? 10;
+        var limit = request.Limit ?? 20;
 
         IQueryable<T> query = Queryable;
         query = ApplyFilters(query, request);

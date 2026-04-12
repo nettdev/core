@@ -1,13 +1,28 @@
-﻿namespace Nett.Core.Domain;
+﻿using Nett.Core.Events;
+
+namespace Nett.Core.Domain;
 
 [ExcludeFromCodeCoverage]
 public abstract class Entity : IEquatable<Entity>
 {
+    private readonly List<IDomainEvent> _events = [];
+    
     public Guid Id { get; init; }
+    public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
 
     protected Entity()
     {
         Id = Guid.CreateVersion7();
+    }
+
+    protected void AddEvent(IDomainEvent @event)
+    {
+        _events.Add(@event);
+    }
+
+    public void ClearEvents()
+    {
+        _events.Clear();
     }
 
     public static bool operator ==(Entity a, Entity b) =>

@@ -16,13 +16,22 @@ public sealed class Error
         new() { Message = message };
 
     public static Error NotFound(string entity, string id) =>
-        new() { Message = $"{entity} with ${id} not found", Code = $"{entity}.NotFound", Severity = Severity.Information };
+        new() { Message = $"{entity} with id [{id}] not found", Code = $"{entity}.NotFound", Severity = Severity.Information };
 
     public static Error Conflict(string entity) =>
         new() { Message = $"{entity} already created", Code = $"{entity}.Conflict", Severity = Severity.Warning };
 
     public static Error Commit() =>
         new () { Message = "Error saving changes", Code = "Database.Commit", Severity = Severity.Error };
+
+    public static Error Validation(string message) =>
+        new() { Message = message, Code = "Validation.Error", Severity = Severity.Warning };
+
+    public static Error NotAllowed(string message, string entity) =>
+        new() { Message = message, Code = $"{entity}.NotAllowed", Severity = Severity.Warning };
+
+    public static Error Custom(string message) =>
+        new() { Message = message, Code = "Generic.Error", Severity = Severity.Error };
 }
 
 public enum Severity
