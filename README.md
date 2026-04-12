@@ -117,30 +117,8 @@ app.MapGet("/", async (PostRepository repo, [AsParameters] PostRequest request, 
 
 Supports `?page=1&limit=10&orderBy=Title&orderByDescending=true&search=GPT&thenBy=CreatedAt`.
 
-### 4. Domain Events with EF Core
 
-```csharp
-public class AppDbContext(DbContextOptions<AppDbContext> options, IDomainEventsDispatcher dispatcher)
-    : DbContext(options)
-{
-    public DbSet<Post> Posts { get; set; }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken ct = default)
-    {
-        await dispatcher.DispatchEventsAsync(this, ct);
-        return await base.SaveChangesAsync(ct);
-    }
-}
-```
-
-Register:
-
-```csharp
-builder.Services.AddScoped<IDomainEventsDispatcher, DomainEventsDispatcher>();
-builder.Services.AddScoped<IPostRepository, IPostRepository>();
-```
-
-### 5. Result & Error Handling
+### 4. Result & Error Handling
 
 ```csharp
 var result = Result.Success(new Post());
@@ -148,12 +126,6 @@ if (result.IsFailure)
 {
     return result.Error;
 }
-
-var result = ParameterRuleBuilder
-    .RuleFor(() => title)
-    .NotEmpty()
-    .MinLength(5)
-    .Build(() => new Post(title));
 
 result.Match(
     post => Console.WriteLine("Valid post {}", post.Title), 
@@ -167,22 +139,6 @@ if (result.IsFailure)
 
 var post = result.Value;
 ```
-
-### 6. Fluent Parameter Validation
-
-```csharp
-public static Result<Person> Create(string email, int age)
-{
-    return ParameterRuleBuilder
-        .RuleFor(() => email).Email().NotEmpty()
-        .RuleFor(() => age).GreaterThan(18)
-        .Build(() => new Person(email, age));
-}
-```
-
-## 📚 Examples
-
-See the [examples](examples/) folder for a full Minimal API demo with PostgreSQL, EF Core, and domain events.
 
 ## 🧪 Testing
 

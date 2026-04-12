@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Nett.Core.Events;
 using NSubstitute;
 using Shouldly;
@@ -16,7 +17,7 @@ public class InMemoryBusTests
         var handler = Substitute.For<IDomainEventHandler<OrderPlacedEvent>>();
         var services = new ServiceCollection();
         services.AddSingleton(handler);
-        var bus = new InMemoryBus(services.BuildServiceProvider());
+        var bus = new InMemoryBus(services.BuildServiceProvider(), NullLogger<InMemoryBus>.Instance);
 
         var domainEvent = new OrderPlacedEvent();
 
@@ -35,7 +36,7 @@ public class InMemoryBusTests
         var handler = Substitute.For<IDomainEventHandler<OrderPlacedEvent>>();
         var services = new ServiceCollection();
         services.AddSingleton(handler);
-        var bus = new InMemoryBus(services.BuildServiceProvider());
+        var bus = new InMemoryBus(services.BuildServiceProvider(), NullLogger<InMemoryBus>.Instance);
 
         var event1 = new OrderPlacedEvent();
         var event2 = new OrderPlacedEvent();
@@ -57,7 +58,7 @@ public class InMemoryBusTests
         var services = new ServiceCollection();
         services.AddSingleton(handler1);
         services.AddSingleton(handler2);
-        var bus = new InMemoryBus(services.BuildServiceProvider());
+        var bus = new InMemoryBus(services.BuildServiceProvider(), NullLogger<InMemoryBus>.Instance);
 
         var domainEvent = new OrderPlacedEvent();
 
@@ -74,7 +75,7 @@ public class InMemoryBusTests
     {
         // Arrange
         var ct = TestContext.Current.CancellationToken;
-        var bus = new InMemoryBus(new ServiceCollection().BuildServiceProvider());
+        var bus = new InMemoryBus(new ServiceCollection().BuildServiceProvider(), NullLogger<InMemoryBus>.Instance);
         var domainEvent = new OrderPlacedEvent();
 
         // Act & Assert
@@ -89,7 +90,7 @@ public class InMemoryBusTests
         var handler = Substitute.For<IDomainEventHandler<OrderPlacedEvent>>();
         var services = new ServiceCollection();
         services.AddSingleton(handler);
-        var bus = new InMemoryBus(services.BuildServiceProvider());
+        var bus = new InMemoryBus(services.BuildServiceProvider(), NullLogger<InMemoryBus>.Instance);
 
         // Act
         await bus.Publish(Array.Empty<OrderPlacedEvent>(), ct);
@@ -105,7 +106,7 @@ public class InMemoryBusTests
         var handler = Substitute.For<IDomainEventHandler<OrderPlacedEvent>>();
         var services = new ServiceCollection();
         services.AddSingleton(handler);
-        var bus = new InMemoryBus(services.BuildServiceProvider());
+        var bus = new InMemoryBus(services.BuildServiceProvider(), NullLogger<InMemoryBus>.Instance);
         var cancellation = TestContext.Current.CancellationToken;
 
         var domainEvent = new OrderPlacedEvent();
